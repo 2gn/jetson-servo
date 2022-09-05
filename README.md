@@ -6,6 +6,7 @@ Run servo motor driver (PCA9685) on Jetson Nano
 
 ## Todo
 [] setup circuit python
+
 [] make cirpython work with mach-nix somehow
 
 ## Long explanation
