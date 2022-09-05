@@ -1,11 +1,17 @@
+{ pkgs ? import <nixpkgs> {}}:
+with pkgs;
 let
-  mach-nix = import (builtins.fetchGit {
-    url = "https://github.com/DavHau/mach-nix";
-    ref = "refs/tags/3.5.0";
-  }) {};
+  af-blinka = ps: ps.callPackage ./customPackages/adafruit-blinka.nix {};
+  python-with-my-packages = python38.withPackages( ps: with ps; [
+    adafruit-pureio
+    (af-blinka ps)
+  ]);
 in
-  mach-nix.mkPython {
-    requirements = ''
-      adafruit-blinka
+  pkgs.mkShell {
+    buildInputs = [
+      python-with-my-packages
+    ];
+    shellHook = ''
+      PYTHONPATH=${python-with-my-packages}/${python-with-my-packages.sitePackages}
     '';
   }
